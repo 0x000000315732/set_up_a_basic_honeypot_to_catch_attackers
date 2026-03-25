@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  honeypot:
+    image: honeypot-php:v1
+    build: 
+      context: ./honeypot
+      dockerfile: Dockerfile
+    container_name: honeypot-php
+    restart: always
+    ports:
+      - "1002:80"
+
+  web:
+    image: honeypot-interface:v1
+    build: 
+      context: ./interface
+      dockerfile: Dockerfile
+    container_name: honeypot-interface
+    restart: always
+    ports:
+      - "1001:80"
+    
+  database:
+    image: mysql:latest
+    container_name: database
+    restart: always
+    envirment:
+      MYSQL_ROOT_PASSWORD: 'pnB£r3F2;1E
+      MYSQL_DATABASE: database
+      MYSQL_USER: honeypot
+      MYSQL_PASSWORD: XGsC?i8~T90J
+    ports:
+      - "1000:3306"
+    volumes:
+      - database_storage:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    
+volumes:
+  database_storage:
